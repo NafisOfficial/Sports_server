@@ -33,6 +33,22 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+    const classCollection = client.db("Sports-Academy-Pro").collection("Classes")
+    const instructorsCollection = client.db("Sports-Academy-Pro").collection("Instructors")
+
+    app.get('/classes',async(req,res)=>{
+        const cursor = classCollection.find().sort({'enrolled':-1});
+        const result = await cursor.toArray()
+        res.send(result);
+    })
+
+    app.get('/instructors',async(req,res)=>{
+        const cursor = instructorsCollection.find().sort({"total_students":-1});
+        const result = await cursor.toArray();
+        res.send(result);
+    })
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
