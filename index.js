@@ -38,13 +38,13 @@ async function run() {
     const instructorsCollection = client.db("Sports-Academy-Pro").collection("Instructors")
 
     app.get('/classes',async(req,res)=>{
-        const cursor = classCollection.find().sort({'enrolled':-1});
+        const cursor = classCollection.find().sort({'enrolled': -1});
         const result = await cursor.toArray()
         res.send(result);
     })
 
     app.get('/instructors',async(req,res)=>{
-        const cursor = instructorsCollection.find().sort({"total_students":-1});
+        const cursor = instructorsCollection.find().sort({"total_students": -1});
         const result = await cursor.toArray();
         res.send(result);
     })
