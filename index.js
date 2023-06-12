@@ -37,6 +37,7 @@ async function run() {
     const classCollection = client.db("Sports-Academy-Pro").collection("Classes")
     const instructorsCollection = client.db("Sports-Academy-Pro").collection("Instructors")
     const usersCollection = client.db("Sports-Academy-Pro").collection("users")
+    const bookedClassesCollection = client.db("Sports-Academy-Pro").collection("bookedClasses")
 
     app.get('/classes',async(req,res)=>{
         const cursor = classCollection.find().sort({'enrolled': -1});
@@ -51,6 +52,13 @@ async function run() {
     })
 
     app.post('/Users',async(req,res)=>{
+
+      const data = req.body;
+      const  result = await bookedClassesCollection.insertOne(data)
+      res.send(result);
+    })
+
+    app.post('/bookedClasses',async(req,res)=>{
 
       const data = req.body;
       const  result = await usersCollection.insertOne(data)
