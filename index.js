@@ -54,14 +54,14 @@ async function run() {
     app.post('/Users',async(req,res)=>{
 
       const data = req.body;
-      const  result = await bookedClassesCollection.insertOne(data)
+      const  result = await usersCollection.insertOne(data)
       res.send(result);
     })
 
     app.post('/bookedClasses',async(req,res)=>{
 
       const data = req.body;
-      const  result = await usersCollection.insertOne(data)
+      const  result = await bookedClassesCollection.insertOne(data)
       res.send(result);
     })
 
@@ -70,6 +70,8 @@ async function run() {
       const result = await cursor.toArray()
       res.send(result);
   })
+
+  app.delete('/user')
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
