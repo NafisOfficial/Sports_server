@@ -36,6 +36,7 @@ async function run() {
 
     const classCollection = client.db("Sports-Academy-Pro").collection("Classes")
     const instructorsCollection = client.db("Sports-Academy-Pro").collection("Instructors")
+    const usersCollection = client.db("Sports-Academy-Pro").collection("users")
 
     app.get('/classes',async(req,res)=>{
         const cursor = classCollection.find().sort({'enrolled': -1});
@@ -47,6 +48,13 @@ async function run() {
         const cursor = instructorsCollection.find().sort({"total_students": -1});
         const result = await cursor.toArray();
         res.send(result);
+    })
+
+    app.post('/Users',async(req,res)=>{
+
+      const data = req.body;
+      const  result = await usersCollection.insertOne(data)
+      res.send(result);
     })
 
     // Send a ping to confirm a successful connection
