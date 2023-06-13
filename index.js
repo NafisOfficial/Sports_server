@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require('cors');
 require('dotenv').config()
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
 const app = express();
@@ -58,7 +58,7 @@ async function run() {
       res.send(result);
     })
 
-    app.post('/bookedClasses',async(req,res)=>{
+    app.post('/userBooked',async(req,res)=>{
 
       const data = req.body;
       const  result = await bookedClassesCollection.insertOne(data)
@@ -71,7 +71,14 @@ async function run() {
       res.send(result);
   })
 
-  app.delete('/user')
+  app.delete('/userBooked/:id',async(req,res)=>{
+      const id = req.params.id;
+      console.log(id);
+      const query = {_id : id}
+      const result = await bookedClassesCollection.deleteOne(query);
+      res.send(result);
+
+  })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
