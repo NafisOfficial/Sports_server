@@ -38,7 +38,7 @@ async function run() {
     const instructorsCollection = client.db("Sports-Academy-Pro").collection("Instructors")
     const usersCollection = client.db("Sports-Academy-Pro").collection("users")
     const bookedClassesCollection = client.db("Sports-Academy-Pro").collection("bookedClasses")
-    const addedClassesCollection = client.db("Sports-Academy-Pro").collection("addedClasses")
+    const feedbackCollection = client.db("Sports-Academy-Pro").collection("feedback")
 
     app.get('/classes',async(req,res)=>{
         const cursor = classCollection.find().sort({'enrolled': -1});
@@ -149,6 +149,18 @@ async function run() {
 
       const data = req.body;
       const  result = await bookedClassesCollection.insertOne(data)
+      res.send(result);
+    })
+    app.post('/feedback',async(req,res)=>{
+
+      const data = req.body;
+      const  result = await feedbackCollection.insertOne(data)
+      res.send(result);
+    })
+
+    app.get('/feedback',async(req,res)=>{
+      const data = feedbackCollection.find()
+      const result = await data.toArray()
       res.send(result);
     })
 
