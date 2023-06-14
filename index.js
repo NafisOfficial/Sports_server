@@ -45,16 +45,32 @@ async function run() {
         const result = await cursor.toArray()
         res.send(result);
     })
+    app.get('/iclasses',async(req,res)=>{
+       const email = req.query.email;
+       const query = {'instructor_email':  email}
+        const cursor = classCollection.find(query).sort({'enrolled': -1});
+        const result = await cursor.toArray()
+        res.send(result);
+    })
 
     app.get('/instructors',async(req,res)=>{
         const cursor = instructorsCollection.find().sort({"total_students": -1});
         const result = await cursor.toArray();
         res.send(result);
     })
-    app.get('/Users',async(req,res)=>{
-        const cursor = usersCollection.find();
-        const result = await cursor.toArray();
-        res.send(result);
+    app.get('/allusers',async(req,res)=>{
+      const result = await usersCollection.find().toArray();
+      res.send(result);
+    })
+    app.get('/users',async(req,res)=>{
+        const email = req.query.email;
+        if(!email){
+          res.send([])
+        }
+        const query = {'email' : email}
+        const cursor = await usersCollection.findOne(query);
+        // const result = await cursor.toArray();
+        res.send(cursor);
     })
 
     app.get('/addedClass',async(req,res)=>{
