@@ -38,6 +38,7 @@ async function run() {
     const instructorsCollection = client.db("Sports-Academy-Pro").collection("Instructors")
     const usersCollection = client.db("Sports-Academy-Pro").collection("users")
     const bookedClassesCollection = client.db("Sports-Academy-Pro").collection("bookedClasses")
+    const addedClassesCollection = client.db("Sports-Academy-Pro").collection("addedClasses")
 
     app.get('/classes',async(req,res)=>{
         const cursor = classCollection.find().sort({'enrolled': -1});
@@ -50,11 +51,81 @@ async function run() {
         const result = await cursor.toArray();
         res.send(result);
     })
+    app.get('/Users',async(req,res)=>{
+        const cursor = usersCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    })
+
+    app.get('/addedClass',async(req,res)=>{
+        const cursor = classCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    })
 
     app.post('/Users',async(req,res)=>{
 
       const data = req.body;
+      const query = {email: data.email}
+      const existinguser = await usersCollection.findOne(query);
+      console.log(existinguser);
+
+      if(existinguser){
+        return res.send({message: "user already exists"})
+      }
+
       const  result = await usersCollection.insertOne(data)
+      res.send(result);
+    })
+
+    app.patch('/users/admin/:id',async(req,res)=>{
+      const action = req.query.action;
+  
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)}
+      const updateDoc = {
+        $set : {
+          action : `${action}`
+        }
+      }
+      const  result = await usersCollection.updateOne(filter,updateDoc)
+      res.send(result);
+    })
+
+    app.patch('/updateClass/:id',async(req,res)=>{
+      
+  
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)}
+      const updateDoc = {
+        $set : {
+          status :'Approved'
+        }
+      }
+      const  result = await classCollection.updateOne(filter,updateDoc)
+      res.send(result);
+    })
+
+
+    app.delete('/updateClass/:id',async(req,res)=>{
+      
+  
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)}
+      const updateDoc = {
+        $set : {
+          status :'Approved'
+        }
+      }
+      const  result = await classCollection.deleteOne(filter,updateDoc)
+      res.send(result);
+    })
+
+
+    app.post('/addedClass',async(req,res)=>{
+
+      const data = req.body;
+      const  result = await classCollection.insertOne(data)
       res.send(result);
     })
 
